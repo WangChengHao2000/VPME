@@ -1,6 +1,6 @@
-def train():
+def main():
     pass
 
 
 if __name__ == '__main__':
-    train()
+    main()

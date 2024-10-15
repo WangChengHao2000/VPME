@@ -53,7 +53,7 @@ class Encoder(nn.Module):
             nn.LeakyReLU())
 
         self.linear = nn.Sequential(
-            nn.Linear(128 * 4 * 4, 768),
+            nn.Linear(128 * 4 * 8, 768),
             nn.LeakyReLU())
 
         self.mu = nn.Linear(768, latent_dims)
@@ -82,10 +82,10 @@ class Decoder(nn.Module):
         self.decoder_linear = nn.Sequential(
             nn.Linear(latent_dims, 768),
             nn.LeakyReLU(),
-            nn.Linear(768, 128 * 4 * 4),
+            nn.Linear(768, 128 * 4 * 8),
             nn.LeakyReLU()
         )
-        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(128, 4, 4))
+        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(128, 4, 8))
 
         self.decoder_layer1 = nn.Sequential(
             nn.ConvTranspose2d(128, 128, 3, stride=2, padding=1, output_padding=1),
