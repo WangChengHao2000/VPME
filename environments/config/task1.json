@@ -4,35 +4,5 @@
   "ego": {
     "model_name": "vehicle.tesla.model3"
   },
-  "vehicle": [],
-  "sensor": [
-    {
-      "camera_type": "sensor.camera.rgb",
-      "position": "front",
-      "transform": {
-        "location": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "rotation": {
-          "pitch": 0,
-          "yaw": 0,
-          "roll": 0
-        }
-      }
-    },
-    {
-      "camera_type": "sensor.camera.rgb",
-      "position": "left"
-    },
-    {
-      "camera_type": "sensor.camera.rgb",
-      "position": "right"
-    },
-    {
-      "camera_type": "sensor.camera.semantic_segmentation",
-      "position": "bev"
-    }
-  ]
+  "vehicle": []
 }
