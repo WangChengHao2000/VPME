@@ -30,30 +30,30 @@ class Encoder(nn.Module):
     def __init__(self, latent_dims=100):
         super(Encoder, self).__init__()
         self.encoder_layer1 = nn.Sequential(
-            nn.Conv2d(3, 32, 4, stride=2),
+            nn.Conv2d(3, 32, 3, stride=2, padding=1),
             nn.LeakyReLU())
 
         self.encoder_layer2 = nn.Sequential(
-            nn.Conv2d(32, 64, 3, stride=2),
+            nn.Conv2d(32, 64, 3, stride=2, padding=1),
             nn.BatchNorm2d(64),
             nn.LeakyReLU())
 
         self.encoder_layer3 = nn.Sequential(
-            nn.Conv2d(64, 128, 3, stride=2),
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),
             nn.LeakyReLU())
 
         self.encoder_layer4 = nn.Sequential(
-            nn.Conv2d(128, 128, 3, stride=2),
+            nn.Conv2d(128, 128, 3, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.LeakyReLU())
 
         self.encoder_layer5 = nn.Sequential(
-            nn.Conv2d(128, 128, 3, stride=2),
+            nn.Conv2d(128, 128, 3, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.LeakyReLU())
 
         self.linear = nn.Sequential(
-            nn.Linear(128 * 6 * 6, 768),
+            nn.Linear(128 * 4 * 4, 768),
             nn.LeakyReLU())
 
         self.mu = nn.Linear(768, latent_dims)
@@ -82,30 +82,45 @@ class Decoder(nn.Module):
         self.decoder_linear = nn.Sequential(
             nn.Linear(latent_dims, 768),
             nn.LeakyReLU(),
-            nn.Linear(768, 128 * 6 * 6),
+            nn.Linear(768, 128 * 4 * 4),
             nn.LeakyReLU()
         )
-        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(128, 6, 6))
-        self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(128, 128, 3, stride=2),
-            nn.LeakyReLU(),
-            nn.ConvTranspose2d(128, 128, 3, stride=2),
-            nn.LeakyReLU(),
-            nn.ConvTranspose2d(128, 64, 3, stride=2),
-            nn.LeakyReLU(),
-            nn.ConvTranspose2d(64, 32, 3, stride=2),
-            nn.LeakyReLU(),
-            nn.ConvTranspose2d(32, 3, 4, stride=2),
+        self.unflatten = nn.Unflatten(dim=1, unflattened_size=(128, 4, 4))
+
+        self.decoder_layer1 = nn.Sequential(
+            nn.ConvTranspose2d(128, 128, 3, stride=2, padding=1, output_padding=1),
+            nn.LeakyReLU())
+
+        self.decoder_layer2 = nn.Sequential(
+            nn.ConvTranspose2d(128, 128, 3, stride=2, padding=1, output_padding=1),
+            nn.LeakyReLU())
+
+        self.decoder_layer3 = nn.Sequential(
+            nn.ConvTranspose2d(128, 64, 3, stride=2, padding=1, output_padding=1),
+            nn.LeakyReLU())
+
+        self.decoder_layer4 = nn.Sequential(
+            nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1, output_padding=1),
+            nn.LeakyReLU())
+
+        self.decoder_layer5 = nn.Sequential(
+            nn.ConvTranspose2d(32, 3, 3, stride=2, padding=1, output_padding=1),
             nn.Sigmoid())
 
     def forward(self, x):
         x = self.decoder_linear(x)
         x = self.unflatten(x)
-        x = self.decoder(x)
+        x = self.decoder_layer1(x)
+        x = self.decoder_layer2(x)
+        x = self.decoder_layer3(x)
+        x = self.decoder_layer4(x)
+        x = self.decoder_layer5(x)
         return x
 
 
 if __name__ == '__main__':
     vae = CNNVariationalAutoencoder()
-    image = np.zeros((3, 100, 100))
+    image = np.zeros((1, 3, 128, 128))
+    image = torch.tensor(image).to(torch.float32).to(device)
     result = vae(image)
+    print(result[0].shape)
