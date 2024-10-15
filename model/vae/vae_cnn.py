@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -105,13 +106,6 @@ class Decoder(nn.Module):
 
 
 if __name__ == '__main__':
-    import PIL.Image as Image
-    import torchvision.transforms as transforms
-
     vae = CNNVariationalAutoencoder()
-
-    img2tensor = transforms.Compose([transforms.ToTensor()])
-    image = Image.open("./checkpoints/images/bev.jpg").convert("RGB")
-    image = img2tensor(image).unsqueeze(0).to(device)
-    print(image.size())
+    image = np.zeros((3, 100, 100))
     result = vae(image)
