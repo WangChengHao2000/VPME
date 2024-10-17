@@ -33,10 +33,10 @@ class PPOAgent(object):
             if isinstance(obs, np.ndarray):
                 obs = torch.from_numpy(obs)
             action_mean, action_sigma, action, logprob = self.old_policy.get_action_and_log_prob(obs.to(device))
-        if is_train:
-            self.memory.observation.append(obs.to(device))
-            self.memory.actions.append(action)
-            self.memory.log_probs.append(logprob)
+        # if is_train:
+        #     self.memory.observation.append(obs.to(device))
+        #     self.memory.actions.append(action)
+        #     self.memory.log_probs.append(logprob)
 
         return action_mean.cpu().numpy().flatten(), action_sigma.cpu().numpy().flatten(), action.detach().cpu().numpy().flatten()
 

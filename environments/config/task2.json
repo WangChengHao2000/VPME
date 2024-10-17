@@ -17,5 +17,21 @@
       }
     }
   },
-  "vehicle": []
+  "vehicle": [
+    {
+      "model_name": "vehicle.tesla.model3",
+      "transform": {
+        "location": {
+          "x": 106.4,
+          "y": -20,
+          "z": 0.6
+        },
+        "rotation": {
+          "pitch": 0,
+          "yaw": -90,
+          "roll": 0
+        }
+      }
+    }
+  ]
 }
